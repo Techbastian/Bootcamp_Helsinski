@@ -1,0 +1,14 @@
+sequenceDiagram
+        actor user
+        participant browser
+        participant server
+        
+        note right of user: Crea el contenido en la nueva nota
+        user ->> browser: Presiona el boton SAVE
+
+        note right of browser: El navegador crea el objeto nota {date: "",content:""}
+        browser ->> server: POST: https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+        activate server
+        server -->> browser: 201 note created
+        deactivate server
+        note left of server: El servidor confirma la creacion de la nota con un mensaje.

@@ -4,47 +4,69 @@ const Header = (props) => {
   )
 }
 
-function Part({content}){
+function Part({part}){
   return(
     <>
-      <p>{content.part} {content.nexercises}</p>
+      <p style={{color:part.color}}>{part.name} {part.exercises}</p>
     </>
   )
 }
 
-const Content = (props) => {
+const Content = ({parts}) => {
   return (
     <div>
-      <Part content={props.miarreglo[0]}/>
-      <Part content={props.miarreglo[1]}/>
-      <Part content={props.miarreglo[2]}/>
+      <Part part={parts[0]}/>
+      <Part part={parts[1]}/>
+      <Part part={parts[2]}/>
     </div>
   )
 }
 
-const Total = (props) => {
+const Total = ({parts}) => {
   return (
-    <h3>Number of exercises {props.miarreglo[0].nexercises +props.miarreglo[1].nexercises +props.miarreglo[2].nexercises}</h3>
+    <h3>Number of exercises {parts[0].exercises + parts[1].exercises + parts[2].exercises}</h3>
   )
 }
 
 function App() {
+
+  const course = {
+    name: 'Half Stack application development',
+    parts: [
+      {
+        name: 'Fundamentals of React',
+        exercises: 10,
+        color:"blue"
+      },
+      {
+        name: 'Using props to pass data',
+        exercises: 7,
+        color:"gray"
+      },
+      {
+        name: 'State of a component',
+        exercises: 14,
+        color:"Red"
+      }
+    ]
+  }
   
-  const course = 'Half Stack application development'
-  const miarreglo = [
-    {
-      part:'Fundamentals of React',
-      nexercises:10
-    },
-    {
-      part:'Using props to pass data',
-      nexercises:7
-    },
-    {
-      part:'State of a component',
-      nexercises:14
-    }
-  ]
+  // const course = 'Half Stack application development'
+  
+  // const parts = [
+  //   {
+  //     name: 'Fundamentals of React',
+  //     exercises: 10
+  //   },
+  //   {
+  //     name: 'Using props to pass data',
+  //     exercises: 7,
+  //   },
+  //   {
+  //     name: 'State of a component',
+  //     exercises: 14
+  //   }
+  // ]
   /*
   const part1 = 'Fundamentals of React'
   const exercises1 = 10
@@ -55,9 +77,9 @@ function App() {
   */
   return (
     <div>
-      <Header content={course}/>
-      <Content miarreglo={miarreglo}/>
-      <Total miarreglo={miarreglo}/>
+      <Header content={course.name}/>
+      <Content parts={course.parts}/>
+      <Total parts={course.parts}/>
     </div>
   )
 }

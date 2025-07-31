@@ -2,11 +2,12 @@ import Note from "./components/Note.jsx";
 import Formulario from "./components/Formulario.jsx";
 import Notes from "./components/Notes.jsx";
 import NotesAxios from "./components/NotesAxios.jsx";
-import { useState, useEffect} from "react";
-import { getAll, createNote } from "./solicitudes/Solicitudes.js";
+import { useState, useEffect } from "react";
+import { getAll, createNote, upDateAll } from "./solicitudes/Solicitudes.js";
 
 //Se podria importar tambien como { Note as NoteComponent } desde el archivo components/Note.jsx -> en este caso no es obligatorio usar llaver a menos que se quiera cambiar el nombre
 //Si se usa export const etc, se debe importar como { Note } desde el archivo components/Note.jsx usar las llaves es obligatorio
+const URL_API_NAV = "http://localhost:3001/notes";
 
 function App() {
   const [notes, setNotes] = useState([]);
@@ -15,67 +16,81 @@ function App() {
   const [body, setBody] = useState({ title: "", content: "" });
   const [filter, setFilter] = useState(false);
 
-  const importants = notes.filter(note => note.important)
-
   function handleSubmit(event) {
     event.preventDefault();
-    
-    createNote("http://localhost:3001/notes", {
-      id: notes.length + 1,
-      ...body
+
+    createNote(URL_API_NAV, {
+      id: (notes.length + 1).toString(),
+      ...body,
     }).then((data) => {
       console.log("Nota creada:", data);
       //tratar de usar el .concat para agregar el nuevo elemento al array de notas
       // setNotes(prevNotes => prevNotes.concat(data));
-      setNotes((prevNotes) => [
-        ...prevNotes,
-        data
-      ]);
+      setNotes((prevNotes) => [...prevNotes, data]);
       setBody({ title: "", content: "" });
     });
   }
 
-  function handleChange({target}) {
-    const {name, value} = target;
+  function handleChange({ target }) {
+    const { name, value } = target;
     console.log("name:", name, "value:", value);
     setBody((prevBody) => {
       return {
         ...prevBody,
-        [name]: value
-      }
-    })
+        [name]: value,
+      };
+    });
   }
 
   const toggleImportance = (id) => {
-    console.log("Toggling importance for note with id:", id);
-  }
+    console.log(`Vamos a cambiar la importancia de la nota ${id}`);
+    const editedNote = notes.find((note) => note.id === id);
+    const content = { ...editedNote, important: !editedNote.important };
+    upDateAll(URL_API_NAV, id, content).then((response) => {
+      setNotes(notes.map((note) => (note.id !== id ? note : response)));
+      //MAP RETORNA UN NUEVO ARRAY, EN ESTE CASO SI SE CUMPLE LA CONDICION, LOS DATOS DE ESTE NUEVO ARRAY SERAN IGUALES AL ANTERIOR, SINO SE HACE EL CAMBIO. DE ESTA FORMA NO SE MODIFICA DIRECTAMENTE EL ESTADO DE LA VARIABLE.
+    }).catch((error) =>{
+      alert(
+        `La nota ${content} no esta dentro de la lista de NOTAS, fue previamente eliminada `
+      )
+      setNotes(note => note.id !== id)
+    });
+  };
 
   useEffect(() => {
     setLoading(true);
-    setTimeout(() => {
-      getAll("http://localhost:3001/notes").then((data) => {
-        console.log("Info del servidor:", data);
-        setNotes(data);
-        setLoading(false);
-      });
-    }, 1000);
+    getAll(URL_API_NAV).then((data) => {
+      console.log("Info del servidor:", data);
+      setNotes(data);
+      setLoading(false);
+    });
   }, []);
+
+  const notesToShow = !filter ? notes : notes.filter((note) => note.important);
 
   return (
     <>
       <h1>React App</h1>
       <h2>Renderizar listas en React</h2>
-      <button onClick={() => setFilter(!filter)}>{filter ? 'Mostrar todas' : 'Mostrar solo importantes'}</button>
+      <button onClick={() => setFilter(!filter)}>
+        {filter ? "Mostrar todas" : "Mostrar solo importantes"}
+      </button>
       {loading && <h3>Cargando datos ...</h3>}
       <ol>
-        {!filter ? notes.map((note) => (
-          <Note key={note.id} {...note} toggleImportance={() => toggleImportance(note.id)} />
-        )) : importants.map((note) => (
-          <Note key={note.id} {...note} toggleImportance={() => toggleImportance(note.id)} />
+        {notesToShow.map((note) => (
+          <Note
+            key={note.id}
+            {...note}
+            toggleImportance={() => toggleImportance(note.id)}
+          />
         ))}
       </ol>
 
-      <Formulario body={body} onChange={handleChange} createNote={handleSubmit} />
+      <Formulario
+        body={body}
+        onChange={handleChange}
+        createNote={handleSubmit}
+      />
       {/* <div>
         {
           [

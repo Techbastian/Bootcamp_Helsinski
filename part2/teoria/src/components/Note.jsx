@@ -1,12 +1,11 @@
-const Note = ({id,title,content,date,important}) => {
+const Note = ({ id, title, content, important, toggleImportance }) => {
   return (
     <li key={id} style={{ marginBottom: '10px', border: '1px solid #ccc', padding: '10px' }}>
       <h3>{title}</h3>
       <p>
         {content}
-        {date && <span> ({date})</span>}
-        {important && <strong>(¡Importante!)</strong>}
       </p>
+      <button onClick={toggleImportance}>{important ? 'Marcar como no importante' : 'Marcar como importante'}</button>
     </li>
   );
 };

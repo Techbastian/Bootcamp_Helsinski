@@ -1,18 +1,26 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Search from "./components/Search.jsx";
 import AddForm from "./components/AddForm.jsx";
 import ShowContacts from "./components/ShowContacts.jsx";
+import { getAllNotes } from "./solicitudes/Solicitudes.js";
 
 function App() {
-  const [persons, setPersons] = useState([
-    { name: "Arto Hellas", phone: "040-123456", id: 1 },
-    { name: "Ada Lovelace", phone: "39-44-5323523", id: 2 },
-    { name: "Dan Abramov", phone: "12-43-234345", id: 3 },
-    { name: "Mary Poppendieck", phone: "39-23-6423122", id: 4 },
-  ]);
+  const [persons, setPersons] = useState([]);
 
   const [resultado, setResultado] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setLoading(true);
+    setTimeout(() => {
+    getAllNotes("http://localhost:3001/persons")
+      .then(persons => {
+        setPersons(persons);
+        setLoading(false);
+      })
+    }, 2000);
+  }, []);
 
   return (
     <div>
@@ -33,6 +41,8 @@ function App() {
             Search results for: <strong>{searchTerm}</strong>
           </p>
         )}
+        {persons.length === 0 && loading && <h3>Loading...</h3>}
+        {persons.length === 0 && !loading && <h3>No contacts available.</h3>}
         {searchTerm && resultado.length === 0 ? (
           <p>No contacts found.</p>
         ) : (

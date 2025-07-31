@@ -1,9 +1,8 @@
-import React from "react";
 import { useState } from "react";
 
 const AddForm = ({ persons, setPersons }) => {
 
-  const [newName, setNewName] = useState({ name: "", phone: "" });
+  const [newName, setNewName] = useState({ name: "", number: "" });
 
   function addPerson(event) {
     event.preventDefault();
@@ -16,17 +15,17 @@ const AddForm = ({ persons, setPersons }) => {
       )
     ) {
       alert(`${newName.name} is already added to phonebook`);
-      setNewName({ name: "", phone: "" });
+      setNewName({ name: "", number: "" });
       return;
     }
 
     const personObject = {
       id: persons.length + 1,
       name: newName.name,
-      phone: newName.phone,
+      number: newName.number,
     };
     setPersons(persons.concat(personObject));
-    setNewName({ name: "", phone: "" });
+    setNewName({ name: "", number: "" });
   }
 
   function handleChange(event) {
@@ -47,8 +46,8 @@ const AddForm = ({ persons, setPersons }) => {
         <strong>Number:</strong>{" "}
         <input
           type="number"
-          value={newName.phone}
-          name="phone"
+          value={newName.number}
+          name="number"
           onChange={handleChange}
         />
         <br />

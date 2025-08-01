@@ -3,15 +3,15 @@ import Contact from "./Contact.jsx";
 
 const ShowContacts = ({ persons, resultado }) => {
   return (
-    <div>
+    <tbody>
       {resultado.length <= 0
         ? persons.map((person) => (
-            <Contact key={person.name} person={person} />
+            <Contact key={person.name} person={person}/>
           ))
         : resultado.map((person) => (
-            <Contact key={person.name} person={person} />
+            <Contact key={person.name} person={person}/>
           ))}
-    </div>
+    </tbody>
   );
 };
 

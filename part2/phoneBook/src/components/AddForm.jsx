@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Solicitudes from "../solicitudes/Solicitudes.js";
 
 const AddForm = ({ persons, setPersons }) => {
 
@@ -6,26 +7,36 @@ const AddForm = ({ persons, setPersons }) => {
 
   function addPerson(event) {
     event.preventDefault();
-
-    if (
-      persons.find(
+    const search = persons.find(
         (person) =>
           person.name.toLocaleLowerCase().replace(/\s/g, "") ===
           newName.name.toLocaleLowerCase().replace(/\s/g, "")
       )
-    ) {
-      alert(`${newName.name} is already added to phonebook`);
-      setNewName({ name: "", number: "" });
+    if (search && window.confirm(`${newName.name} is already added to phonebook, replace the old number with a new one?`)) {
+      const UpdatedPerson = {...search,number: newName.number}
+      Solicitudes.updateContact(search.id,UpdatedPerson)
+      .then(response => {
+        setPersons(persons.map(person => person.id === search.id ? response : person))
+        console.log("Contact updated:", response);
+        setNewName({ name: "", number: "" });
+      }).catch( error => {
+        alert("Hay problemas Editando este contacto, intenta de nuevo", error.message)
+      })      
       return;
     }
 
     const personObject = {
-      id: persons.length + 1,
+      id: (persons.length + 1).toString(),
       name: newName.name,
       number: newName.number,
     };
-    setPersons(persons.concat(personObject));
-    setNewName({ name: "", number: "" });
+    Solicitudes.createContact(personObject).then(response => {
+      
+      setPersons(persons.concat(response));
+      console.log(persons)
+      setNewName({ name: "", number: "" });
+    })
+    
   }
 
   function handleChange(event) {

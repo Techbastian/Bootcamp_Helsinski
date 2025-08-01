@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Search from "./components/Search.jsx";
 import AddForm from "./components/AddForm.jsx";
 import ShowContacts from "./components/ShowContacts.jsx";
-import { getAllNotes } from "./solicitudes/Solicitudes.js";
+import services from "./solicitudes/Solicitudes.js";
 
 function App() {
   const [persons, setPersons] = useState([]);
@@ -14,12 +14,11 @@ function App() {
   useEffect(() => {
     setLoading(true);
     setTimeout(() => {
-    getAllNotes("http://localhost:3001/persons")
-      .then(persons => {
+      services.getAllNotes().then((persons) => {
         setPersons(persons);
         setLoading(false);
-      })
-    }, 2000);
+      });
+    }, 1000);
   }, []);
 
   return (
@@ -46,7 +45,9 @@ function App() {
         {searchTerm && resultado.length === 0 ? (
           <p>No contacts found.</p>
         ) : (
-          <ShowContacts persons={persons} resultado={resultado} />
+          <table>
+            <ShowContacts persons={persons} resultado={resultado} />
+          </table>
         )}
       </div>
     </div>

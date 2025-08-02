@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Solicitudes from "../solicitudes/Solicitudes.js";
 
-const AddForm = ({ persons, setPersons }) => {
+const AddForm = ({ persons, setPersons, setMessage, setColor }) => {
 
   const [newName, setNewName] = useState({ name: "", number: "" });
 
@@ -17,10 +17,20 @@ const AddForm = ({ persons, setPersons }) => {
       Solicitudes.updateContact(search.id,UpdatedPerson)
       .then(response => {
         setPersons(persons.map(person => person.id === search.id ? response : person))
-        console.log("Contact updated:", response);
+        setColor("green");
+        setMessage(`Has realizado el cambio de numero de ${newName.name} a ${newName.number} correctamente`);
+        setTimeout(() => {
+          setMessage(null);
+        }, 3000);
         setNewName({ name: "", number: "" });
       }).catch( error => {
-        alert("Hay problemas Editando este contacto, intenta de nuevo", error.message)
+        setColor("red");
+        setMessage(`El contacto ${newName.name} ha sido borrado de la base de datos`);
+        setTimeout(() => {
+          setMessage(null);
+          setColor("");
+        }, 3000);
+        setPersons(persons.filter(person => person.id !== search.id));
       })      
       return;
     }
@@ -31,7 +41,10 @@ const AddForm = ({ persons, setPersons }) => {
       number: newName.number,
     };
     Solicitudes.createContact(personObject).then(response => {
-      
+      setMessage(`${newName.name} ha sido añadido a tu lista correctamente`);
+      setTimeout(() => {
+        setMessage(null);
+      }, 3000);
       setPersons(persons.concat(response));
       console.log(persons)
       setNewName({ name: "", number: "" });

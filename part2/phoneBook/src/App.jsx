@@ -3,6 +3,7 @@ import Search from "./components/Search.jsx";
 import AddForm from "./components/AddForm.jsx";
 import ShowContacts from "./components/ShowContacts.jsx";
 import services from "./solicitudes/Solicitudes.js";
+import Notifications from "./components/Notifications.jsx";
 
 function App() {
   const [persons, setPersons] = useState([]);
@@ -10,6 +11,9 @@ function App() {
   const [resultado, setResultado] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
+  // State for notifications
+  const [color, setColor] = useState("");
+  const [message, setMessage] = useState(null);
 
   useEffect(() => {
     setLoading(true);
@@ -24,6 +28,8 @@ function App() {
   return (
     <div>
       <h1>Phonebook</h1>
+      <Notifications message={message} color={color} />
+      <h2>Search Contacts</h2>
       <Search
         persons={persons}
         setResultado={setResultado}
@@ -32,7 +38,7 @@ function App() {
       <br />
       <br />
       <h2>Add new contact</h2>
-      <AddForm persons={persons} setPersons={setPersons} />
+      <AddForm persons={persons} setPersons={setPersons} setMessage={setMessage} setColor={setColor} />
       <h2>Contacts list</h2>
       <div>
         {searchTerm && (

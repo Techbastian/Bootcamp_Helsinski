@@ -1,6 +1,6 @@
 const Note = ({ id, title, content, important, toggleImportance }) => {
   return (
-    <li key={id} style={{ marginBottom: '10px', border: '1px solid #ccc', padding: '10px' }}>
+    <li key={id} className="note">
       <h3>{title}</h3>
       <p>
         {content}

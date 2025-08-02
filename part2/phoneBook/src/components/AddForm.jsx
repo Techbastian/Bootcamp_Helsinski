@@ -31,6 +31,7 @@ const AddForm = ({ persons, setPersons, setMessage, setColor }) => {
           setColor("");
         }, 3000);
         setPersons(persons.filter(person => person.id !== search.id));
+        setNewName({ name: "", number: "" });
       })      
       return;
     }

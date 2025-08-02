@@ -6,8 +6,9 @@ import services from "./solicitudes/Solicitudes.js";
 import Notifications from "./components/Notifications.jsx";
 
 function App() {
+  // State for contacts
   const [persons, setPersons] = useState([]);
-
+  // State for search results and search term
   const [resultado, setResultado] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);

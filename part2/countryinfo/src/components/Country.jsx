@@ -1,6 +1,24 @@
-import React from "react";
+import { useEffect, useState } from "react";
+import axios from 'axios'
+
+const apiweather = import.meta.env.VITE_WEATHER_API_KEY
 
 const Country = ({ country }) => {
+
+  const weatherAPI = `https://api.openweathermap.org/data/2.5/weather?lat=${country.latlng[0]}&lon=${country.latlng[1]}&${apiweather}`
+
+  const [weather, setWeather] = useState({})
+
+  useEffect(() => {
+    axios.get(weatherAPI)
+    .then(response => response.data)
+    .then(data => console.log(data))
+    .catch(error =>{
+      console.error("No se ha encontrado informacion: ",error)
+    })
+  }, [])
+  
+
   return (
     <div>
       <h1>{country.name.common}</h1>
@@ -30,6 +48,9 @@ const Country = ({ country }) => {
           <li key={index}>{country.languages[language]}</li>
         ))}
       </ul>
+      <div>
+        <h2>wheather in {country.capital[0]}</h2>
+      </div>
     </div>
   );
 };

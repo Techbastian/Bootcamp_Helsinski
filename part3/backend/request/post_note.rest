@@ -1,0 +1,17 @@
+//El content type siempre es muy importante, se especifica que tipo de dato le vamos a enviar
+POST http://localhost:3001/api/notes HTTP/1.1
+content-type: application/json 
+
+{
+    "title":"Nota desde rest",
+    "content": "esta es una nueva nota"
+}
+
+###
+
+POST http://localhost:3001/api/notes HTTP/1.1
+content-type: application/json 
+
+{
+    "title":"Nota desde rest"
+}

@@ -49,6 +49,16 @@ let notes = [
 //   response.end(JSON.stringify(notes));
 // });
 
+const requestLogger = (request, response, next) => {
+  console.log('Method:', request.method)
+  console.log('Path:  ', request.path)
+  console.log('Body:  ', request.body)
+  console.log('---')
+  next()
+}
+
+app.use(requestLogger)
+
 app.get("/", (reques, response) => {
   response.send("<h1>Hello world</h1>");
 });
@@ -100,6 +110,12 @@ app.post("/api/notes", (request, response) => {
 
   response.status(201).json(newNote);
 });
+
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+
+app.use(unknownEndpoint)
 
 const PORT = 3001;
 app.listen(PORT, () => {

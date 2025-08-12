@@ -9,7 +9,8 @@ import Footer from "./components/Footer.jsx";
 
 //Se podria importar tambien como { Note as NoteComponent } desde el archivo components/Note.jsx -> en este caso no es obligatorio usar llaver a menos que se quiera cambiar el nombre
 //Si se usa export const etc, se debe importar como { Note } desde el archivo components/Note.jsx usar las llaves es obligatorio
-const URL_API_NAV = "http://localhost:3001/api/notes";
+const URL_API_NAV = "/api/notes";
+const URL_DEPLOY = "https://notes-deploy-vjh8.onrender.com/api/notes"
 
 function App() {
   const [notes, setNotes] = useState([]);

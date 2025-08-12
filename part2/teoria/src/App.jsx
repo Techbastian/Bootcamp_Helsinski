@@ -1,7 +1,7 @@
 import Note from "./components/Note.jsx";
 import Formulario from "./components/Formulario.jsx";
-import Notes from "./components/Notes.jsx";
-import NotesAxios from "./components/NotesAxios.jsx";
+//import Notes from "./components/Notes.jsx";
+//import NotesAxios from "./components/NotesAxios.jsx";
 import { useState, useEffect } from "react";
 import { getAll, createNote, upDateAll } from "./solicitudes/Solicitudes.js";
 import Notification from "./components/Notification.jsx";
@@ -9,7 +9,7 @@ import Footer from "./components/Footer.jsx";
 
 //Se podria importar tambien como { Note as NoteComponent } desde el archivo components/Note.jsx -> en este caso no es obligatorio usar llaver a menos que se quiera cambiar el nombre
 //Si se usa export const etc, se debe importar como { Note } desde el archivo components/Note.jsx usar las llaves es obligatorio
-const URL_API_NAV = "http://localhost:3001/notes";
+const URL_API_NAV = "http://localhost:3001/api/notes";
 
 function App() {
   const [notes, setNotes] = useState([]);

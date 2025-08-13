@@ -1,10 +1,12 @@
 import axios from "axios";
 
-const URL_NAVIGATE = "http://localhost:3001/persons";
+const URL_NAVIGATE = "http://localhost:3001/api/persons";
+const URL_NAVIGATE_2 = "/api/persons";
+const URL_NAVIGATE_DEPLOY = "http://localhost:3001/api/persons";
 
 const getAllNotes = () => {
   return axios
-    .get(URL_NAVIGATE)
+    .get(URL_NAVIGATE_2)
     .then((response) => response.data)
     .catch((error) => {
       console.error("Error fetching notes:", error);
@@ -13,7 +15,7 @@ const getAllNotes = () => {
 };
 
 const createContact = (info) => {
-  const peticion = fetch(URL_NAVIGATE, {
+  const peticion = fetch(URL_NAVIGATE_2, {
     method: "POST",
     body: JSON.stringify(info),
     headers: {
@@ -25,7 +27,7 @@ const createContact = (info) => {
 };
 
 const deleteContact = (id) => {
-  return axios.delete(`${URL_NAVIGATE}/${id}`)
+  return axios.delete(`${URL_NAVIGATE_2}/${id}`)
   .then(response => response.data)
   .catch(error => {
     console.error("Error deleting contact:", error);
@@ -34,7 +36,7 @@ const deleteContact = (id) => {
 }
 
 const updateContact = (id, info) => {
-  return axios.put(`${URL_NAVIGATE}/${id}`, info)
+  return axios.put(`${URL_NAVIGATE_2}/${id}`, info)
     .then(response => response.data)
     .catch(error => {
       console.error("Error updating contact:", error);
